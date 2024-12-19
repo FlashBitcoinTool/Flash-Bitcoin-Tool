@@ -1,0 +1,137 @@
+name: Advanced Release with SEO Metadata and Multiple Formats
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Trigger workflow on version tag push (e.g., v7.0.0)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js (if applicable, adjust to your project)
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      # Step 3: Install dependencies (adjust if necessary)
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Build the project
+      - name: Build project
+        run: npm run build
+
+      # Step 5: Generate SEO metadata
+      - name: Generate SEO metadata
+        run: |
+          echo "{
+            \"title\": \"Flash Bitcoin Tool v${{ github.ref_name }}\",
+            \"description\": \"Flash Bitcoin Tool v${{ github.ref_name }} is a powerful prank tool for sending fake USDT. Download now for fun!\",
+            \"keywords\": \"USDT, prank, tool, Bitcoin, fake USDT, cryptocurrency, v7.0.0\",
+            \"author\": \"Rekt Developer\",
+            \"robots\": \"index, follow\",
+            \"image\": \"https://link-to-image.com/image.png\"
+          }" > seo-metadata.json
+
+  create-packages:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Create ZIP Archive
+      - name: Create ZIP Archive
+        run: |
+          mkdir release
+          cp -r * release/
+          zip -r release/flash-bitcoin-tool-v${{ github.ref_name }}.zip release/
+
+      # Step 3: Create RAR Archive
+      - name: Create RAR Archive
+        run: |
+          sudo apt-get install rar
+          mkdir release
+          cp -r * release/
+          rar a release/flash-bitcoin-tool-v${{ github.ref_name }}.rar release/
+
+      # Step 4: Build APK for Android
+      - name: Build APK (Android)
+        run: |
+          ./gradlew assembleRelease
+          cp app/build/outputs/apk/release/app-release.apk release/flash-bitcoin-tool-v${{ github.ref_name }}.apk
+
+      # Step 5: Build EXE for Windows
+      - name: Build EXE (Windows)
+        run: |
+          sudo apt-get install wine
+          wine ./build/exe_creator.exe --source ./build --output release/flash-bitcoin-tool-v${{ github.ref_name }}.exe
+
+  upload-releases:
+    runs-on: ubuntu-latest
+    needs: create-packages
+    steps:
+
+      # Step 1: Checkout code again
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Create GitHub Release and upload assets
+      - name: Create GitHub Release and upload assets
+        id: create_release
+        uses: gh actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: "Release v${{ github.ref_name }}"
+          body: |
+            ## Release v${{ github.ref_name }}
+            - Added support for ZIP, RAR, APK, EXE formats.
+            - Improved SEO metadata.
+            - Optimized performance and bug fixes.
+          draft: false
+          prerelease: false
+
+      # Step 3: Upload ZIP to GitHub Release
+      - name: Upload ZIP to GitHub Release
+        uses: gh actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/flash-bitcoin-tool-v${{ github.ref_name }}.zip
+          asset_name: flash-bitcoin-tool-v${{ github.ref_name }}.zip
+          asset_content_type: application/zip
+
+      # Step 4: Upload RAR to GitHub Release
+      - name: Upload RAR to GitHub Release
+        uses: gh actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/flash-bitcoin-tool-v${{ github.ref_name }}.rar
+          asset_name: flash-bitcoin-tool-v${{ github.ref_name }}.rar
+          asset_content_type: application/x-rar-compressed
+
+      # Step 5: Upload APK to GitHub Release
+      - name: Upload APK to GitHub Release
+        uses: gh actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/flash-bitcoin-tool-v${{ github.ref_name }}.apk
+          asset_name: flash-bitcoin-tool-v${{ github.ref_name }}.apk
+          asset_content_type: application/vnd.android.package-archive
+
+      # Step 6: Upload EXE to GitHub Release
+      - name: Upload EXE to GitHub Release
+        uses: gh actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: release/flash-bitcoin-tool-v${{ github.ref_name }}.exe
+          asset_name: flash-bitcoin-tool-v${{ github.ref_name }}.exe
+          asset_content_type: application/x-ms-dos-executable
