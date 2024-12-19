@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Flash Bitcoin Tool V7.0.0 - Create secure and fast transactions with advanced features.">
+  <meta name="keywords" content="Bitcoin, Flash Tool, Crypto Transactions, Blockchain">
+  <meta name="author" content="Likhon Sheikh">
+  <meta property="og:title" content="Flash Bitcoin Tool V7.0.0">
+  <meta property="og:description" content="Advanced tool for creating secure Bitcoin transactions.">
+  <meta property="og:url" content="https://yourwebsite.com">
+  <meta property="og:type" content="website">
+  <title>Flash Bitcoin Tool V7.0.0</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Flash Bitcoin Tool V7.0.0</h1>
+      <p class="activation-status">Activation Status: <span id="activation-status">Inactive</span></p>
+    </header>
+    <main>
+      <form id="flash-tool-form">
+        <!-- Wallet Section -->
+        <div class="section">
+          <label for="wallet">Wallet:</label>
+          <input type="text" id="wallet" placeholder="No wallet selected" disabled>
+        </div>
+
+        <!-- Transaction Details -->
+        <div class="section">
+          <label for="pay-to">Pay to:</label>
+          <input type="text" id="pay-to" placeholder="Recipient Address">
+          <label for="amount">Amount (BTC):</label>
+          <input type="number" id="amount" min="0.01" step="0.01" placeholder="0.00">
+          <button type="button" id="random-amount">Random Amount</button>
+        </div>
+
+        <!-- Address Info -->
+        <div class="section">
+          <input type="checkbox" id="customize-fee">
+          <label for="customize-fee">Customize transaction fee:</label>
+          <input type="number" id="fee" min="1" placeholder="1 sat/byte" disabled>
+        </div>
+
+        <div class="section">
+          <input type="checkbox" id="randomize-delay">
+          <label for="randomize-delay">Set randomized delay (hours):</label>
+          <div class="delay">
+            <input type="number" id="min-delay" placeholder="Min Delay">
+            <input type="number" id="max-delay" placeholder="Max Delay">
+          </div>
+        </div>
+
+        <!-- Proxy Settings -->
+        <div class="section">
+          <p>Proxy Settings:</p>
+          <input type="radio" name="proxy" id="no-proxy" checked>
+          <label for="no-proxy">Don’t use proxy</label>
+          <input type="radio" name="proxy" id="detect-proxy">
+          <label for="detect-proxy">Detect default proxy</label>
+          <input type="text" id="proxy-address" placeholder="127.0.0.1:80" disabled>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions">
+          <button type="button" id="create-transaction">Create a new transaction</button>
+          <input type="checkbox" id="fake-confirm">
+          <label for="fake-confirm">Make 100% confirmed fake transaction</label>
+        </div>
+      </form>
+    </main>
+    <footer>
+      <p>Last Update: Today</p>
+      <p>Blockchain Size: 413.948k</p>
+      <a href="https://coinmarketcap.com" target="_blank">Bitcoin - Coinmarketcap</a>
+      <p>Server Status: <span id="server-status">Online</span></p>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
