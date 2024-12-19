@@ -1,0 +1,32 @@
+Flash-Bitcoin-Tool/
+├── assets/
+│   ├── images/
+│   │   └── bitcoin-logo.svg
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   └── script.js
+│   └── favicon.ico
+├── bin/
+│   └── index.html
+├── contracts/
+│   └── solidity/
+│       └── contracts/
+│           └── ViewBTC.sol
+├── software/
+│   └── index.html
+├── public/
+│   ├── release/
+│   │   ├── products/
+│   │   │   └── seo/
+│   │   │       ├── meta.json
+│   │   │       └── index.html
+├── config/
+│   ├── api_config.json
+│   ├── proxy_config.json
+├── dist/
+│   └── build/
+├── .gitignore
+├── README.md
+├── LICENSE
+└── package.json
